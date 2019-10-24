@@ -1,0 +1,51 @@
+---
+title: "p8105_midterm_mk4022"
+author: "Mary Knoop"
+date: "10/24/2019"
+output: hithub_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load librarires for analysis 
+```{r}
+library(tidyverse)
+library(knitr)
+library(readxl)
+```
+
+Problem 1
+Import and clean the data. Format the data to use appropriate variable names; fill in missing values with data where appropriate (as indicated in the header information); create character and ordered factors for categorical variables.
+
+```{r}
+midterm_data = 
+read_excel("./data/p8105_mtp_data.xlsx", range = "A9:I1230") %>%
+janitor::clean_names() %>%
+mutate(
+eop_size_mm = replace_na(eop_size_mm, 0),
+eop_size = recode(eop_size, "0" = "0-5", "1" = "5-10", "2" = "10 - 15", "3" = "31-40", "4" = "40-50", "5" = "51-60", "6" = "60+",
+"7" = "60+", "8" = "60+"), 
+sex = recode(sex, "0" = "Female", "1" = "Male"),
+fhp_category = recode(fhp_category, "0" = "0-10", "1" = "10-20", "2" = "20-30", "3" = "30-40", "4" = "40-50", "5" = "50-60", "6" = "60-70", "7" = "70-80"),
+age_group = recode(age_group, "2" = "18-30", "3" = "31-40", "4" = "41-50", "5" = "51-60", "6" = "60+", "7" =
+"60+", "8" = "60+"), 
+sex = as.factor(sex), 
+age_group = as.factor(age_group),
+eop_size = as.factor(eop_size), 
+fhp_category = as.factor(fhp_category))
+
+midterm_table = midterm_data %>%
+filter(age_group != "1") %>%
+group_by(sex, age_group) %>%
+summarize (n= n()) %>%
+pivot_wider(
+names_from = sex, 
+values_from = n
+) %>%
+knitr::kable ()
+
+midterm_table
+
+```
