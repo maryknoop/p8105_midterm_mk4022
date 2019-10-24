@@ -7,6 +7,13 @@ Load librarires for
     analysis
 
 ``` r
+devtools::install_github("thomasp85/patchwork")
+```
+
+    ## Skipping install of 'patchwork' from a github remote, the SHA1 (36b49187) has not changed since last install.
+    ##   Use `force = TRUE` to force installation
+
+``` r
 library(tidyverse)
 ```
 
@@ -24,12 +31,14 @@ library(tidyverse)
 ``` r
 library(knitr)
 library(readxl)
+library(dplyr)
+library(patchwork)
 ```
 
-Problem 1 Import and clean the data. Format the data to use appropriate
-variable names; fill in missing values with data where appropriate (as
-indicated in the header information); create character and ordered
-factors for categorical variables.
+Problem 1 Part 1: Import and clean the data. Format the data to use
+appropriate variable names; fill in missing values with data where
+appropriate (as indicated in the header information); create character
+and ordered factors for categorical variables.
 
 ``` r
 posture_data = 
@@ -62,8 +71,17 @@ posture_data
     ## # … with 1,209 more rows, and 2 more variables: fhp_size_mm <dbl>,
     ## #   fhp_category <ord>
 
+Part 2: Briefly describe the data cleaning process and the resulting
+dataset, identifying key variables based on your understanding of the
+original scientific report. How many participants are included? What is
+the age and gender distribution (a human-readable table may help here)?
+
+The dataset posture\_data is comprised of 9 columns. Key variables
+include We have 1,219 participants included in the posture\_data
+dataset. The age and gender distribution is
+
 ``` r
-posture_table = posture_data %>%
+agesex_table = posture_data %>%
 filter(age_group != "1") %>%
 group_by(sex, age_group) %>%
 summarize (n= n()) %>%
@@ -73,7 +91,7 @@ values_from = n
 ) %>%
 knitr::kable ()
 
-posture_table
+agesex_table
 ```
 
 | age\_group | female | male |
@@ -83,5 +101,18 @@ posture_table
 | 41-50      |    106 |  101 |
 | 51-60      |     99 |  101 |
 | 60+        |    155 |  150 |
+
+``` r
+agesex_plot=
+posture_data %>% 
+ggplot(aes(x = age, fill = sex)) +
+geom_histogram()
+
+agesex_plot
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 Problem 2

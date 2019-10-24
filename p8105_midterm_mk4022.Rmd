@@ -11,14 +11,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Load librarires for analysis 
 ```{r}
+devtools::install_github("thomasp85/patchwork")
+
 library(tidyverse)
 library(knitr)
 library(readxl)
+library(dplyr)
+library(patchwork)
 ```
 
 Problem 1
+Part 1:
 Import and clean the data. Format the data to use appropriate variable names; fill in missing values with data where appropriate (as indicated in the header information); create character and ordered factors for categorical variables.
-
 ```{r}
 posture_data = 
   read_excel("/Users/maryknoop/Desktop/Data_Sci/p8105_midterm_mk4022/data/p8105_mtp_data.xlsx", skip = 8) %>%
@@ -32,8 +36,13 @@ posture_data =
     filter(age_group != "1")
 
 posture_data
+```
+Part 2:
+Briefly describe the data cleaning process and the resulting dataset, identifying key variables based on your understanding of the original scientific report. How many participants are included? What is the age and gender distribution (a human-readable table may help here)?
 
-posture_table = posture_data %>%
+The dataset posture_data is comprised of 9 columns. Key variables include  We have 1,219 participants included in the posture_data dataset.  The age and gender distribution is
+```{r}
+agesex_table = posture_data %>%
 filter(age_group != "1") %>%
 group_by(sex, age_group) %>%
 summarize (n= n()) %>%
@@ -43,7 +52,17 @@ values_from = n
 ) %>%
 knitr::kable ()
 
-posture_table
+agesex_table
+
+agesex_plot=
+posture_data %>% 
+ggplot(aes(x = age, fill = sex)) +
+geom_histogram()
+
+agesex_plot
+
+
+
 
 ```
 
