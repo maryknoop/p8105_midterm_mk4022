@@ -124,7 +124,7 @@ of these.
 
 ``` r
 figure3 = 
-ggplot(posture_data, aes(x = age, y = fhp_size_mm)) +
+ggplot(posture_data, aes(x = age, y = fhp_size_mm, na.rm = TRUE)) +
 geom_point(aes(color = age_group)) + 
 geom_smooth(size = .7, se = TRUE) + 
 facet_grid(~sex)
@@ -152,7 +152,22 @@ labs(
 title = "Rate of enlarged EOP by Age and Sex",
 x = "Age_Group",
 y = "EOP Rate")
+figure4
 ```
+
+![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+
+``` r
+figure3+figure4
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 6 rows containing non-finite values (stat_smooth).
+    
+    ## Warning: Removed 6 rows containing missing values (geom_point).
+
+![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
 
 Part 2: Create a 2 x 5 collection of panels, which show the association
 between FHP size and EOP size in each age and sex group. Comment on your
@@ -160,7 +175,7 @@ plots with respect to the scientific question of interest.
 
 ``` r
 posture_data %>%
-  ggplot(aes(x = eop_size_mm, y = fhp_size_mm, color = age_group)) +
+  ggplot(aes(x = eop_size_mm, y = fhp_size_mm, na.rm = TRUE, color = age_group)) +
          geom_point () + facet_grid (sex ~ age_group) + labs (title = "2x5 Panel" , 
     x = "eop_size_mm" , 
     y = "fhp_size_mm")
@@ -169,3 +184,42 @@ posture_data %>%
     ## Warning: Removed 6 rows containing missing values (geom_point).
 
 ![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+Problem 3 Part 1: \* Are the authors’ stated sample sizes in each age
+group consistent with the data you have available? \* Are the reported
+mean and standard deviations for FHP size consistent with the data you
+have available? \* The authors find “the prevalence of EEOP to be 33% of
+the study population”. What is the definition of EEOP, and what
+variables can you use to evaluate this claim? Is the finding consistent
+with the data available to you? \* FHP is noted to be more common in
+older subjects, with “FHP \>40 mm observed frequently (34.5%) in the
+over 60s cases”. Are the broad trends and specific values consistent
+with your data?
+
+Sample sizes from paper: 18–30 n=300, 31–40 n=200, 41–50 n=200, 51–60
+n=200 and \>60
+n=300
+
+``` r
+mean(pull(filter(posture_data,sex == "female"), fhp_size_mm), na.rm = TRUE)
+```
+
+    ## [1] 23.71455
+
+``` r
+sd(pull(filter(posture_data,sex == "female"), fhp_size_mm), na.rm = TRUE)
+```
+
+    ## [1] 10.62294
+
+``` r
+mean(pull(filter(posture_data,sex == "male"), fhp_size_mm), na.rm = TRUE)
+```
+
+    ## [1] 28.48993
+
+``` r
+sd(pull(filter(posture_data,sex == "male"), fhp_size_mm), na.rm = TRUE)
+```
+
+    ## [1] 14.66856
