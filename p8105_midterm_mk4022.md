@@ -135,8 +135,8 @@ ggplot(aes(x = age_group, y = rate, group =sex, color = sex)) +
 geom_point () +
 geom_line () +
 labs(
-title = "Rate of enlarged EOP by Age and Sex",
-x = "Age_Group",
+title = "Rate of EEOP by Age and Sex",
+x = "AgeGroup",
 y = "EOP Rate")
 figure4
 ```
