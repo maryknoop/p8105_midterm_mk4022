@@ -197,8 +197,22 @@ over 60s cases”. Are the broad trends and specific values consistent
 with your data?
 
 Sample sizes from paper: 18–30 n=300, 31–40 n=200, 41–50 n=200, 51–60
-n=200 and \>60
-n=300
+n=200 and \>60 n=300
+
+``` r
+posture_data %>%
+  group_by(age_group) %>%
+  summarize(n_obs = n())
+```
+
+    ## # A tibble: 5 x 2
+    ##   age_group n_obs
+    ##   <ord>     <int>
+    ## 1 18-30       303
+    ## 2 31-40       204
+    ## 3 41-50       207
+    ## 4 51-60       200
+    ## 5 60+         305
 
 ``` r
 mean(pull(filter(posture_data,sex == "female"), fhp_size_mm), na.rm = TRUE)
