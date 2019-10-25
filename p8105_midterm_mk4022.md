@@ -17,14 +17,14 @@ devtools::install_github("thomasp85/patchwork")
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ───────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+    ## ── Attaching packages ───────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 
     ## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
     ## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
     ## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
     ## ✔ readr   1.3.1     ✔ forcats 0.4.0
 
-    ## ── Conflicts ──────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ── Conflicts ──────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
@@ -35,10 +35,7 @@ library(dplyr)
 library(patchwork)
 ```
 
-Problem 1 Part 1: Import and clean the data. Format the data to use
-appropriate variable names; fill in missing values with data where
-appropriate (as indicated in the header information); create character
-and ordered factors for categorical variables.
+Problem 1 Part 1:
 
 ``` r
 posture_data = 
@@ -70,14 +67,11 @@ posture_data
     ## # … with 1,209 more rows, and 2 more variables: fhp_size_mm <dbl>,
     ## #   fhp_category <ord>
 
-Part 2: Briefly describe the data cleaning process and the resulting
-dataset, identifying key variables based on your understanding of the
-original scientific report. How many participants are included? What is
-the age and gender distribution (a human-readable table may help here)?
-
-The dataset posture\_data is comprised of 9 columns. Key variables
-include We have 1,219 participants included in the posture\_data
-dataset. The age and gender distribution is
+Part 2: The dataset posture\_data is comprised of 9 columns. Key
+variables include eop\_size\_mm, fhp\_size\_mm, age, age\_group, and
+sex. Some variables were converted to ordered factors, and others
+remained numeric. We have 1,219 participants included in the
+posture\_data dataset.
 
 ``` r
 agesex_table = posture_data %>%
@@ -112,15 +106,7 @@ agesex_plot
 
 ![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
-Problem 2 Figure 3 shows only the mean and standard deviation for FHP,
-but does not show the distribution of the underlying data. Figure 4
-shows the number of participants in each age and sex group who have an
-enlarged EOP (based on categorical EOP Size – groups 0 and 1 vs groups
-2, 3, 4, and 5). However, the number of participants in each age and sex
-group was controlled by the researchers, so the number with enlarged EOP
-in each group is not as informative as the rate of enlarged EOP in each
-group. Create a two-panel figure that contains improved versions of both
-of these.
+Problem 2 Part 1:
 
 ``` r
 figure3 = 
@@ -169,9 +155,9 @@ figure3+figure4
 
 ![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
 
-Part 2: Create a 2 x 5 collection of panels, which show the association
-between FHP size and EOP size in each age and sex group. Comment on your
-plots with respect to the scientific question of interest.
+Part 2: Our plots show that for both men and women the rate of EOP size
+is higher among age 18-30 and increased FHP is more common among age
+60+. This is in line with the findings in the original paper.
 
 ``` r
 posture_data %>%
@@ -185,9 +171,8 @@ posture_data %>%
 
 ![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
-Problem 3 Part 1: \* Are the authors’ stated sample sizes in each age
-group consistent with the data you have available? Sample sizes from
-paper: 18–30 n=300, 31–40 n=200, 41–50 n=200, 51–60 n=200 and \>60 n=300
+Problem 3 Part 1: Yes, a few groups have 3-4 more than cited in the
+paper, but in general they are consistent among age groups.
 
 ``` r
 posture_data %>%
@@ -204,9 +189,9 @@ posture_data %>%
     ## 4 51-60       200
     ## 5 60+         305
 
-Part 2: \* Are the reported mean and standard deviations for FHP size
-consistent with the data you have
-available?
+Part 2: Yes, our findings are consistent with the above mean and
+standard deviations for males and females cited in the
+paper.
 
 ``` r
 mean(pull(filter(posture_data,sex == "female"), fhp_size_mm), na.rm = TRUE)
@@ -232,12 +217,11 @@ sd(pull(filter(posture_data,sex == "male"), fhp_size_mm), na.rm = TRUE)
 
     ## [1] 14.66856
 
-Part 3: \* The authors find “the prevalence of EEOP to be 33% of the
-study population”. What is the definition of EEOP, and what variables
-can you use to evaluate this claim? Is the finding consistent with the
-data available to you? EEOP is an enlarged external occipital
-protuberance. We can use the variable eop\_size\_mm to determine how
-many of our subjects are above the 10mm specifiation for EEOP.
+Part 3: EEOP is an enlarged external occipital protuberance greater . We
+can use the variable eop\_size\_mm to determine how many of our subjects
+are above the 10mm specifiation for EEOP.  
+The prevalence from the paper is 33% and we find that is it 32%. This is
+similar enough to be consistent.
 
 ``` r
 posture_data %>%
@@ -250,21 +234,34 @@ posture_data %>%
     ##       <dbl>
     ## 1     0.322
 
-Part 4: \* FHP is noted to be more common in older subjects, with “FHP
-\>40 mm observed frequently (34.5%) in the over 60s cases”. Are the
-broad trends and specific values consistent with your data?
+Part 4: Yes, we see in the below plot that there is a greater frequency
+of increased FHP size in the age group 60+.
 
 ``` r
 posture_data %>%
  filter(fhp_size_mm > 40) %>%
  group_by(age_group) %>%
- summarize(n_obs=n()) %>%
+ summarize(n_obs = n()) %>%
  ggplot(aes(x = age_group, y = n_obs, color = age_group)) +
 geom_bar(stat = "identity") +
- geom_text(aes(label = n_obs), vjust=1.6)+
-   labs(title = "Number of >40 FHP",
+ geom_text(aes(label = n_obs), vjust = 2) + labs(title = "Frequency >40 FHP",
    x = "age group",
-   y = "number >40 FHP")
+   y = "frequency >40 FHP")
 ```
 
 ![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+Problem 4 The original report concludes that there is a 33% prevalance
+of EEOP in the population, that those aged 60+ have increased FHP size,
+and that those aged 18-30 have a higher rate of EEOP than other age
+groups due to increased mechanical load from using hand-held devices.
+While the results in our analysis conincide with the results found in
+the paper, we do not agree with the causal effect that is demonstrated
+by the authors. The methods in which the participants were recruited for
+the age group of 18-30 resulted in a potential bias which was
+erroneously interpreted by the authors. I do not think that this data is
+sufficient to suggest that cell phones are causing horn growth, but do
+think it should be further investigated. In order to make this causal
+assumption of hand-held devices and increaed prevalance of EEOP I would
+want detailed information on participant technology use, and lifestyle
+variables to coincide with eop and fhp sizes.
