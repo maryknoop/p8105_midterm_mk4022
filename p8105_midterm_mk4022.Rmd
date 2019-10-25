@@ -34,7 +34,6 @@ posture_data =
     fhp_category = factor(fhp_category,c(0, 1, 2, 3, 4, 5, 6, 7),c("0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-80"), ordered = TRUE),
     age_group = factor(age_group, c("2", "3", "4", "5", "6", "7", "8"), c("18-30", "31-40", "41-50", "51-60", "60+", "60+", "60+"), ordered = TRUE)) %>%
     filter(age_group != "1")
-
 posture_data
 ```
 Part 2:
@@ -51,19 +50,48 @@ names_from = sex,
 values_from = n
 ) %>%
 knitr::kable ()
-
 agesex_table
 
 agesex_plot=
 posture_data %>% 
 ggplot(aes(x = age, fill = sex)) +
 geom_histogram()
-
 agesex_plot
-
-
-
 
 ```
 
 Problem 2
+Figure 3 shows only the mean and standard deviation for FHP, but does not show the distribution of the underlying data. Figure 4 shows the number of participants in each age and sex group who have an enlarged EOP (based on categorical EOP Size – groups 0 and 1 vs groups 2, 3, 4, and 5). However, the number of participants in each age and sex group was controlled by the researchers, so the number with enlarged EOP in each group is not as informative as the rate of enlarged EOP in each group. Create a two-panel figure that contains improved versions of both of these.
+```{r}
+figure3 = 
+ggplot(posture_data, aes(x = age, y = fhp_size_mm)) +
+geom_point(aes(color = age_group)) + 
+geom_smooth(size = .7, se = TRUE) + 
+facet_grid(~sex)
+figure3
+
+figure4 = 
+posture_data %>% 
+mutate(enlarged_eop = as.numeric(ifelse(eop_size_mm >=10, "1", "0"))) %>% 
+group_by(age_group, sex) %>% 
+summarize(rate = mean(enlarged_eop)) %>% 
+ggplot(aes(x = age_group, y = rate, group =sex, color = sex)) +
+geom_point () +
+geom_line () +
+labs(
+title = "Rate of enlarged EOP by Age and Sex",
+x = "Age_Group",
+y = "EOP Rate")
+```
+
+Part 2:
+Create a 2 x 5 collection of panels, which show the association between FHP size and EOP size in each age and sex group. Comment on your plots with respect to the scientific question of interest.
+```{r}
+posture_data %>%
+  ggplot(aes(x = eop_size_mm, y = fhp_size_mm, color = age_group)) +
+         geom_point () + facet_grid (sex ~ age_group) + labs (title = "2x5 Panel" , 
+    x = "eop_size_mm" , 
+    y = "fhp_size_mm")
+
+```
+
