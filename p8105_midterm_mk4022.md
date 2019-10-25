@@ -17,14 +17,14 @@ devtools::install_github("thomasp85/patchwork")
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ───────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+    ## ── Attaching packages ───────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 
     ## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
     ## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
     ## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
     ## ✔ readr   1.3.1     ✔ forcats 0.4.0
 
-    ## ── Conflicts ──────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ── Conflicts ──────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
@@ -35,7 +35,9 @@ library(dplyr)
 library(patchwork)
 ```
 
-Problem 1 Part 1:
+Problem 1 Part 1: We imported the data, replaced all NA values for
+eop\_size\_mm with zeros, and converted eop\_size, sex, fhp\_category,
+and age\_group to ordered factors.
 
 ``` r
 posture_data = 
@@ -251,13 +253,13 @@ geom_bar(stat = "identity") +
 
 ![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-Problem 4 The original report concludes that there is a 33% prevalance
+Problem 4 The original report concludes that there is a 33% prevalence
 of EEOP in the population, that those aged 60+ have increased FHP size,
 and that those aged 18-30 have a higher rate of EEOP than other age
 groups due to increased mechanical load from using hand-held devices.
-While the results in our analysis conincide with the results found in
-the paper, we do not agree with the causal effect that is demonstrated
-by the authors. The methods in which the participants were recruited for
+While the results in our analysis coincide with the results found in the
+paper, we do not agree with the causal effect that is demonstrated by
+the authors. The methods in which the participants were recruited for
 the age group of 18-30 resulted in a potential bias which was
 erroneously interpreted by the authors. I do not think that this data is
 sufficient to suggest that cell phones are causing horn growth, but do

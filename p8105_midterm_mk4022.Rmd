@@ -22,6 +22,7 @@ library(patchwork)
 
 Problem 1
 Part 1:
+We imported the data, replaced all NA values for eop_size_mm with zeros, and converted eop_size, sex, fhp_category, and age_group to ordered factors. 
 ```{r}
 posture_data = 
   read_excel("/Users/maryknoop/Desktop/Data_Sci/p8105_midterm_mk4022/data/p8105_mtp_data.xlsx", skip = 8) %>%
@@ -135,7 +136,7 @@ geom_bar(stat = "identity") +
 ```
 
 Problem 4
-The original report concludes that there is a 33% prevalance of EEOP in the population, that those aged 60+ have increased FHP size, and that those aged 18-30 have a higher rate of EEOP than other age groups due to increased mechanical load from using hand-held devices.  While the results in our analysis conincide with the results found in the paper, we do not agree with the causal effect that is demonstrated by the authors.  The methods in which the participants were recruited for the age group of 18-30 resulted in a potential bias which was erroneously interpreted by the authors. I do not think that this data is sufficient to suggest that cell phones are causing horn growth, but do think it should be further investigated. In order to make this causal assumption of hand-held devices and increaed prevalance of EEOP I would want detailed information on participant technology use, and lifestyle variables to coincide with eop and fhp sizes.  
+The original report concludes that there is a 33% prevalence of EEOP in the population, that those aged 60+ have increased FHP size, and that those aged 18-30 have a higher rate of EEOP than other age groups due to increased mechanical load from using hand-held devices.  While the results in our analysis coincide with the results found in the paper, we do not agree with the causal effect that is demonstrated by the authors.  The methods in which the participants were recruited for the age group of 18-30 resulted in a potential bias which was erroneously interpreted by the authors. I do not think that this data is sufficient to suggest that cell phones are causing horn growth, but do think it should be further investigated. In order to make this causal assumption of hand-held devices and increaed prevalance of EEOP I would want detailed information on participant technology use, and lifestyle variables to coincide with eop and fhp sizes.  
 
 
 
