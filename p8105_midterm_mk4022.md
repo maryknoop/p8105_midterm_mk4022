@@ -186,18 +186,8 @@ posture_data %>%
 ![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 Problem 3 Part 1: \* Are the authors’ stated sample sizes in each age
-group consistent with the data you have available? \* Are the reported
-mean and standard deviations for FHP size consistent with the data you
-have available? \* The authors find “the prevalence of EEOP to be 33% of
-the study population”. What is the definition of EEOP, and what
-variables can you use to evaluate this claim? Is the finding consistent
-with the data available to you? \* FHP is noted to be more common in
-older subjects, with “FHP \>40 mm observed frequently (34.5%) in the
-over 60s cases”. Are the broad trends and specific values consistent
-with your data?
-
-Sample sizes from paper: 18–30 n=300, 31–40 n=200, 41–50 n=200, 51–60
-n=200 and \>60 n=300
+group consistent with the data you have available? Sample sizes from
+paper: 18–30 n=300, 31–40 n=200, 41–50 n=200, 51–60 n=200 and \>60 n=300
 
 ``` r
 posture_data %>%
@@ -213,6 +203,10 @@ posture_data %>%
     ## 3 41-50       207
     ## 4 51-60       200
     ## 5 60+         305
+
+Part 2: \* Are the reported mean and standard deviations for FHP size
+consistent with the data you have
+available?
 
 ``` r
 mean(pull(filter(posture_data,sex == "female"), fhp_size_mm), na.rm = TRUE)
@@ -237,3 +231,40 @@ sd(pull(filter(posture_data,sex == "male"), fhp_size_mm), na.rm = TRUE)
 ```
 
     ## [1] 14.66856
+
+Part 3: \* The authors find “the prevalence of EEOP to be 33% of the
+study population”. What is the definition of EEOP, and what variables
+can you use to evaluate this claim? Is the finding consistent with the
+data available to you? EEOP is an enlarged external occipital
+protuberance. We can use the variable eop\_size\_mm to determine how
+many of our subjects are above the 10mm specifiation for EEOP.
+
+``` r
+posture_data %>%
+ mutate(eeop = as.numeric(ifelse(eop_size_mm > 10, "1", "0"))) %>%
+ summarize (eeop_rate = mean(eeop))
+```
+
+    ## # A tibble: 1 x 1
+    ##   eeop_rate
+    ##       <dbl>
+    ## 1     0.322
+
+Part 4: \* FHP is noted to be more common in older subjects, with “FHP
+\>40 mm observed frequently (34.5%) in the over 60s cases”. Are the
+broad trends and specific values consistent with your data?
+
+``` r
+posture_data %>%
+ filter(fhp_size_mm > 40) %>%
+ group_by(age_group) %>%
+ summarize(n_obs=n()) %>%
+ ggplot(aes(x = age_group, y = n_obs, color = age_group)) +
+geom_bar(stat = "identity") +
+ geom_text(aes(label = n_obs), vjust=1.6)+
+   labs(title = "Number of >40 FHP",
+   x = "age group",
+   y = "number >40 FHP")
+```
+
+![](p8105_midterm_mk4022_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
